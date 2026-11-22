@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@KODLA.GEC — Hayalindeki Uygulamayı Kodla, Geç.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --bg-card: #111111;
+            --primary: #b5ff4a;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --border-color: #222222;
+            --border-highlight: #334422;
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-main); }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* NAVBAR */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; max-width: 1400px; margin: 0 auto; }
+        .logo { font-size: 24px; font-weight: 800; letter-spacing: -1px; display: flex; align-items: center; }
+        .logo .at { color: var(--primary); }
+        .logo .kodla { color: var(--text-main); }
+        .logo .gec { color: var(--primary); }
+        .nav-links { display: flex; gap: 30px; align-items: center; font-size: 15px; font-weight: 500; }
+        .nav-links a:hover, .nav-links .active { color: var(--primary); }
+        .btn-outline { border: 1px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 8px; font-weight: 600; transition: 0.3s; cursor: pointer; background: transparent; }
+        .btn-outline:hover { background-color: var(--primary); color: #000; }
+
+        /* HERO SECTION */
+        .hero { display: flex; justify-content: space-between; align-items: center; padding: 40px 5% 80px; max-width: 1400px; margin: 0 auto; position: relative; }
+        .hero-content { flex: 1; max-width: 650px; z-index: 2; }
+        .location-badge { display: inline-flex; align-items: center; gap: 8px; background-color: #1a1a1a; border: 1px solid var(--border-color); padding: 6px 16px; border-radius: 20px; font-size: 13px; color: var(--text-muted); margin-bottom: 25px; }
+        .location-badge i { color: var(--primary); }
+        .hero h1 { font-size: 64px; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -1.5px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p.subtitle { font-size: 22px; color: var(--text-muted); margin-bottom: 35px; font-weight: 400; }
+        .hero-buttons { display: flex; gap: 20px; margin-bottom: 35px; }
+        .btn-primary { background-color: var(--primary); color: #000; padding: 15px 30px; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 15px; font-size: 16px; transition: 0.3s; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-primary i { font-size: 24px; }
+        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); padding: 15px 30px; border-radius: 12px; font-weight: 600; display: flex; align-items: center; gap: 10px; font-size: 16px; background: transparent; transition: 0.3s; cursor: pointer; }
+        .btn-secondary:hover { background-color: rgba(181, 255, 74, 0.1); }
+        .features-list { display: flex; gap: 20px; font-size: 14px; color: var(--text-muted); }
+        .features-list span { display: flex; align-items: center; gap: 8px; }
+        .features-list i { color: var(--primary); background: rgba(181, 255, 74, 0.1); border-radius: 50%; padding: 4px; font-size: 10px; }
+
+        /* HERO VISUAL (CODE EDITOR) */
+        .hero-visual { flex: 1; display: flex; justify-content: flex-end; position: relative; }
+        .code-window { background-color: #0d0d0d; border: 1px solid #333; border-radius: 12px; width: 100%; max-width: 550px; box-shadow: 0 0 50px rgba(181, 255, 74, 0.05); position: relative; }
+        .code-window::before { content: ''; position: absolute; top: -20px; right: -20px; bottom: -20px; left: -20px; border: 1px solid rgba(181, 255, 74, 0.2); border-radius: 20px; z-index: -1; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #333; background-color: #1a1a1a; border-radius: 12px 12px 0 0; font-size: 12px; color: #888; }
+        .code-header .tab { background-color: #0d0d0d; padding: 5px 15px; border-radius: 5px 5px 0 0; color: var(--primary); border: 1px solid #333; border-bottom: none; }
+        .code-body { padding: 20px; font-family: 'Courier New', Courier, monospace; font-size: 13px; color: #888; line-height: 1.5; }
+        .code-body .keyword { color: #c678dd; }
+        .code-body .string { color: #98c379; }
+        .code-body .function { color: #61afef; }
+        .code-body .number { color: #d19a66; }
+
+        /* BÖLÜM BAŞLIKLARI */
+        .section-title { text-align: center; font-size: 32px; margin-bottom: 50px; position: relative; display: inline-block; left: 50%; transform: translateX(-50%); }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 20%; width: 60%; height: 3px; background-color: var(--primary); border-radius: 2px; }
+
+        /* SERVICES SECTION */
+        .services { padding: 80px 5%; max-width: 1400px; margin: 0 auto; border-top: 1px solid var(--border-color); }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .service-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 30px; transition: 0.3s; cursor: pointer; }
+        .service-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(181, 255, 74, 0.05); }
+        .service-icon { color: var(--primary); font-size: 36px; margin-bottom: 20px; }
+        .service-card h3 { font-size: 22px; margin-bottom: 15px; }
+        .service-card p { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 25px; min-height: 70px; }
+        .service-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .service-tags span { background-color: rgba(181, 255, 74, 0.1); color: var(--primary); padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .click-info { font-size: 13px; color: var(--primary); display: flex; align-items: center; gap: 5px; opacity: 0.7; transition: 0.3s; }
+        .service-card:hover .click-info { opacity: 1; }
+
+        /* PORTFOLYO (ÇALIŞMALAR) SECTION */
+        .portfolio { padding: 80px 5%; max-width: 1400px; margin: 0 auto; border-top: 1px solid var(--border-color); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 60px; }
+        .stat-item { text-align: center; padding: 30px 20px; background-color: #111; border-radius: 16px; border: 1px solid var(--border-color); }
+        .stat-item h4 { font-size: 42px; color: var(--primary); font-weight: 800; margin-bottom: 5px; }
+        .stat-item p { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .project-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; transition: 0.3s; cursor: pointer; display: block; }
+        .project-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(181, 255, 74, 0.1); }
+        .project-img { width: 100%; height: 200px; background-color: #1a1a1a; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border-color); position: relative; overflow: hidden; }
+        .project-img i { font-size: 50px; color: #333; transition: 0.3s; }
+        .project-card:hover .project-img i { color: var(--primary); transform: scale(1.1); }
+        .project-info { padding: 25px; }
+        .project-info h3 { font-size: 20px; margin-bottom: 10px; color: var(--text-main); }
+        .project-info p { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; line-height: 1.5; }
+        .project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .project-tags span { font-size: 11px; color: var(--primary); background: rgba(181, 255, 74, 0.1); padding: 4px 10px; border-radius: 4px; }
+
+        /* HAKKIMIZDA SECTION */
+        .about { padding: 80px 5%; max-width: 1400px; margin: 0 auto; border-top: 1px solid var(--border-color); }
+        .about-content { max-width: 900px; margin: 0 auto; text-align: center; }
+        .about p { color: var(--text-muted); font-size: 17px; line-height: 1.8; margin-bottom: 25px; }
+        .about .highlight { color: var(--text-main); font-weight: 600; }
+        .about strong { color: var(--primary); font-weight: 700; }
+
+        /* MODAL STİLLERİ (Ortak) */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; }
+        .modal.show { display: flex; align-items: center; justify-content: center; opacity: 1; }
+        .modal-content { background-color: var(--bg-card); margin: auto; padding: 40px; border: 1px solid var(--border-highlight); border-radius: 20px; width: 90%; max-width: 600px; position: relative; transform: translateY(20px); transition: transform 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal.show .modal-content { transform: translateY(0); }
+        .close-btn { color: var(--text-muted); position: absolute; top: 20px; right: 25px; font-size: 28px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close-btn:hover { color: var(--primary); }
+        .modal-icon { font-size: 48px; color: var(--primary); margin-bottom: 20px; }
+        .modal-content h3 { font-size: 28px; margin-bottom: 15px; }
+        .modal-content p { color: var(--text-muted); font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+        .modal-content ul { list-style: none; margin-bottom: 30px; }
+        .modal-content ul li { color: var(--text-main); font-size: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .modal-content ul li i { color: var(--primary); font-size: 12px; }
+        
+        /* PROJE DETAY MODAL ÖZEL STİL */
+        .project-detail-box { background: #1a1a1a; padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary); margin-bottom: 20px; }
+        .project-detail-box h4 { color: var(--primary); margin-bottom: 10px; font-size: 16px; }
+        .project-detail-box p { margin-bottom: 0; color: var(--text-main); font-size: 15px; }
+
+        .modal-btn { display: inline-block; background-color: var(--primary); color: #000; padding: 12px 25px; border-radius: 8px; font-weight: 600; text-align: center; transition: 0.3s; width: 100%; }
+        .modal-btn:hover { background-color: #9ce639; }
+
+        /* FOOTER */
+        footer { background-color: #050505; border-top: 1px solid var(--border-color); padding: 60px 5% 20px; }
+        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand p { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-top: 15px; }
+        .footer-col h4 { font-size: 18px; margin-bottom: 20px; font-weight: 600; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 15px; color: var(--text-muted); font-size: 15px; }
+        .footer-contact-link { display: flex; align-items: center; gap: 10px; transition: color 0.3s ease; }
+        .footer-contact-link:hover { color: var(--primary); }
+        .footer-contact-link i { color: var(--text-main); font-size: 18px; transition: color 0.3s ease; }
+        .footer-contact-link:hover i { color: var(--primary); }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid var(--border-color); color: #666; font-size: 13px; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-content { max-width: 100%; margin-bottom: 50px; display: flex; flex-direction: column; align-items: center; }
+            .hero h1 { font-size: 40px; }
+            .hero p.subtitle { font-size: 18px; }
+            .hero-buttons { justify-content: center; flex-direction: column; width: 100%; max-width: 300px; }
+            .btn-primary, .btn-secondary { justify-content: center; }
+            .features-list { justify-content: center; flex-direction: column; align-items: center; gap: 10px; }
+            .services-grid, .portfolio-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-contact-link { justify-content: center; }
+            .logo { justify-content: center; margin-bottom: 20px; }
+            .modal-content { padding: 30px 20px; }
+            .nav-links { display: none; } /* Mobilde menü gizle (Basitlik için) */
+        }
+    </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">
+        <span class="at">@</span><span class="kodla">KODLA.</span><span class="gec">GEC</span>
+    </div>
+    <div class="nav-links">
+        <a href="#" class="active">Anasayfa</a>
+        <a href="#hizmetler">Hizmetler</a>
+        <a href="#calismalar">Çalışmalar</a>
+        <a href="#hakkimizda">Hakkımızda</a>
+        <a href="#iletisim">İletişim</a>
+        <button class="btn-outline" onclick="openModal('modal-teklif')">Teklif Al</button>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="location-badge">
+            <i class="fa-solid fa-location-dot"></i> Adıyaman, Türkiye • 7/24 Destek
+        </div>
+        <h1>Hayalindeki Uygulamayı <span>Kodla, Geç.</span></h1>
+        <p class="subtitle">Web Sitesi - Mobil Uygulama - Bot - Tanıtım Sayfası</p>
+        
+        <div class="hero-buttons">
+            <a href="https://wa.me/905515198994" target="_blank" class="btn-primary">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div>
+                    <span style="display:block; font-size:14px; opacity:0.8;">WhatsApp'tan Yaz</span>
+                    Ücretsiz Danış
+                </div>
+            </a>
+            <a href="#hizmetler" class="btn-secondary">
+                Hizmetleri Keşfet <i class="fa-solid fa-arrow-down"></i>
+            </a>
+        </div>
+
+        <div class="features-list">
+            <span><i class="fa-solid fa-check"></i> Hızlı Teslim</span>
+            <span><i class="fa-solid fa-check"></i> SEO Uyumlu</span>
+            <span><i class="fa-solid fa-check"></i> Temiz & Modern Kod</span>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="code-window">
+            <div class="code-header">
+                <div class="tab">proje.tsx</div>
+                <div class="dots">
+                    <i class="fa-solid fa-minus" style="font-size:10px; margin-right:10px;"></i>
+                    <i class="fa-regular fa-square" style="font-size:10px; margin-right:10px;"></i>
+                    <i class="fa-solid fa-xmark" style="font-size:10px;"></i>
+                </div>
+            </div>
+            <div class="code-body">
+                <span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;<br>
+                <span class="keyword">import</span> { motion } <span class="keyword">from</span> <span class="string">'framer-motion'</span>;<br><br>
+                <span class="keyword">const</span> <span class="function">HeroSection</span> = () => {<br>
+                &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">div</span> className=<span class="string">"hero"</span>&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">h1</span>&gt;Hayalindeki Uygulamayı Kodla&lt;/<span class="keyword">h1</span>&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">p</span>&gt;Modern ve SEO uyumlu web siteleri.&lt;/<span class="keyword">p</span>&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">button</span>&gt;Teklif Al&lt;/<span class="keyword">button</span>&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="keyword">div</span>&gt;<br>
+                &nbsp;&nbsp;);<br>
+                };<br><br>
+                <span class="keyword">export default</span> HeroSection;
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="services" id="hizmetler">
+    <h2 class="section-title">Hizmetlerimiz</h2>
+    <div class="services-grid">
+        
+        <div class="service-card" onclick="openModal('modal-web')">
+            <div class="service-icon"><i class="fa-solid fa-globe"></i></div>
+            <h3>Web Sitesi</h3>
+            <p>Modern, hızlı ve SEO uyumlu web siteleri. Kurumsal, e-ticaret ve tanıtım sayfaları.</p>
+            <div class="service-tags">
+                <span>Responsive</span>
+                <span>Panel</span>
+                <span>SEO</span>
+            </div>
+            <div class="click-info">Detayları Gör <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+        <div class="service-card" onclick="openModal('modal-mobil')">
+            <div class="service-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h3>Mobil Uygulama</h3>
+            <p>iOS & Android için kullanıcı dostu mobil uygulamalar. React Native & Flutter çözümleri.</p>
+            <div class="service-tags">
+                <span>Performans</span>
+                <span>Bildirim</span>
+                <span>API</span>
+            </div>
+            <div class="click-info">Detayları Gör <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+        <div class="service-card" onclick="openModal('modal-bot')">
+            <div class="service-icon"><i class="fa-solid fa-gear"></i></div>
+            <h3>Bot & Otomasyon</h3>
+            <p>WhatsApp, Telegram ve web için otomasyon botları. İş akışlarını otomatikleştirin.</p>
+            <div class="service-tags">
+                <span>Zamanlama</span>
+                <span>Entegrasyon</span>
+                <span>Raporlama</span>
+            </div>
+            <div class="click-info">Detayları Gör <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- PORTFOLYO (ÇALIŞMALAR) SECTION -->
+<section class="portfolio" id="calismalar">
+    <h2 class="section-title">Çalışmalarımız</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h4>50+</h4>
+            <p>Tamamlanan Proje</p>
+        </div>
+        <div class="stat-item">
+            <h4>%100</h4>
+            <p>Müşteri Memnuniyeti</p>
+        </div>
+        <div class="stat-item">
+            <h4>7/24</h4>
+            <p>Kesintisiz Destek</p>
+        </div>
+        <div class="stat-item">
+            <h4>3x</h4>
+            <p>Daha Fazla Satış</p>
+        </div>
+    </div>
+
+    <div class="portfolio-grid">
+        
+        <!-- Proje 1: E-Ticaret -->
+        <div class="project-card" onclick="openModal('modal-proje1')">
+            <div class="project-img">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <div class="project-info">
+                <h3>GecShop - E-Ticaret</h3>
+                <p>Kurumsal düzeyde hızlı ve güvenli alışveriş deneyimi sunan, tam entegre e-ticaret platformu.</p>
+                <div class="project-tags">
+                    <span>React</span>
+                    <span>Node.js</span>
+                    <span>MongoDB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proje 2: Mobil Uygulama -->
+        <div class="project-card" onclick="openModal('modal-proje2')">
+            <div class="project-img">
+                <i class="fa-solid fa-dumbbell"></i>
+            </div>
+            <div class="project-info">
+                <h3>FitLife - Spor Uygulaması</h3>
+                <p>Kullanıcıların antrenmanlarını takip edebildiği, iOS ve Android uyumlu fitness uygulaması.</p>
+                <div class="project-tags">
+                    <span>Flutter</span>
+                    <span>Firebase</span>
+                    <span>UI/UX</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proje 3: Bot -->
+        <div class="project-card" onclick="openModal('modal-proje3')">
+            <div class="project-img">
+                <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <div class="project-info">
+                <h3>KargoBot - WhatsApp Otomasyonu</h3>
+                <p>Müşterilerin siparişlerini sorgulayabildiği, 7/24 kesintisiz çalışan akıllı WhatsApp botu.</p>
+                <div class="project-tags">
+                    <span>Python</span>
+                    <span>WhatsApp API</span>
+                    <span>Otomasyon</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- HAKKIMIZDA SECTION -->
+<section class="about" id="hakkimizda">
+    <h2 class="section-title">Biz Kimiz?</h2>
+    <div class="about-content">
+        <p>Biz sadece kod yazan bir ekip değil, <span class="highlight">hayalleri dijital dünyaya taşıyan bir teknoloji ailesiyiz.</span> Adıyaman merkezli olarak başladığımız bu yolculukta, Türkiye'nin dört bir yanından gelen fikirleri, en son teknolojilerle buluşturarak gerçeğe dönüştürüyoruz.</p>
+        <p>Her projeye bir sanat eseri titizliğiyle yaklaşıyoruz. Çünkü biliyoruz ki, <strong>iyi bir yazılım sadece çalışmaz, aynı zamanda kullanıcıyı büyüler.</strong> Biz de tam olarak bunu yapıyoruz: Hızlı, güvenli ve göz alıcı tasarımlarla işinizi bir adım öne taşıyoruz.</p>
+        <p>Kodla.gec olarak vizyonumuz, sadece web siteleri veya uygulamalar yapmak değil; <strong>işletmenizin dijital dönüşümüne öncülük etmek.</strong> Siz hayalinizi kurun, gerisini bize bırakın. Çünkü biz, <strong>"Hayalindeki Uygulamayı Kodla, Geç"</strong> diyoruz!</p>
+    </div>
+</section>
+      <!-- MODAL PENCERELERİ -->
+    
+    <!-- 1. Web Sitesi Modalı -->
+    <div id="modal-web" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-web')">&times;</span>
+            <div class="modal-icon"><i class="fa-solid fa-globe"></i></div>
+            <h3>Web Sitesi Geliştirme</h3>
+            <p>Markanızı dijital dünyada en iyi şekilde temsil edecek, hızlı ve kullanıcı dostu web siteleri tasarlıyoruz. İster kurumsal bir site, ister bir e-ticaret platformu olsun; projelerinizi en son teknolojilerle kodluyoruz.</p>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> Mobil, Tablet ve Bilgisayar Uyumlu Tasarım</li>
+                <li><i class="fa-solid fa-check"></i> Arama Motoru Optimizasyonu (SEO) Altyapısı</li>
+                <li><i class="fa-solid fa-check"></i> Yönetim Paneli (Admin Panel) Entegrasyonu</li>
+                <li><i class="fa-solid fa-check"></i> Hızlı Yükleme Süreleri ve Güvenlik</li>
+            </ul>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20Web%20Sitesi%20hizmetiniz%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="modal-btn">Web Sitesi İçin Teklif Al</a>
+        </div>
+    </div>
+
+    <!-- 2. Mobil Uygulama Modalı -->
+    <div id="modal-mobil" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-mobil')">&times;</span>
+            <div class="modal-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h3>Mobil Uygulama Geliştirme</h3>
+            <p>Fikrinizi App Store ve Google Play'de milyonlarca kullanıcının indirebileceği gerçek bir uygulamaya dönüştürüyoruz. React Native ve Flutter ile hem iOS hem de Android için performanslı uygulamalar geliştiriyoruz.</p>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> iOS & Android Çift Platform Desteği</li>
+                <li><i class="fa-solid fa-check"></i> Kullanıcı Dostu (UI/UX) Arayüz Tasarımı</li>
+                <li><i class="fa-solid fa-check"></i> Push (Anlık Bildirim) Sistemleri</li>
+                <li><i class="fa-solid fa-check"></i> API Entegrasyonları ve Veritabanı Yönetimi</li>
+            </ul>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20Mobil%20Uygulama%20hizmetiniz%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="modal-btn">Uygulama İçin Teklif Al</a>
+        </div>
+    </div>
+
+    <!-- 3. Bot & Otomasyon Modalı -->
+    <div id="modal-bot" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-bot')">&times;</span>
+            <div class="modal-icon"><i class="fa-solid fa-robot"></i></div>
+            <h3>Bot & Otomasyon Çözümleri</h3>
+            <p>İşletmenizdeki tekrarlayan işleri otomatikleştirerek zamandan ve maliyetten tasarruf edin. Müşteri hizmetlerinden sipariş takibine kadar birçok süreci 7/24 otomatik hale getiriyoruz.</p>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> WhatsApp / Telegram Chatbot Geliştirme</li>
+                <li><i class="fa-solid fa-check"></i> E-Ticaret ve Kargo Entegrasyonları</li>
+                <li><i class="fa-solid fa-check"></i> Web Kazıma (Scraping) ve Veri Çekme</li>
+                <li><i class="fa-solid fa-check"></i> İş Akışı (Workflow) ve Raporlama Otomasyonu</li>
+            </ul>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20Bot%20ve%20Otomasyon%20hizmetiniz%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="modal-btn">Otomasyon İçin Teklif Al</a>
+        </div>
+    </div>
+
+    <!-- 4. Proje 1 (E-Ticaret) Detay Modalı -->
+    <div id="modal-proje1" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-proje1')">&times;</span>
+            <div class="modal-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+            <h3>GecShop - E-Ticaret Vaka Analizi</h3>
+            <div class="project-detail-box">
+                <h4>Sorun:</h4>
+                <p>Müşterimizin eski altyapısı çok yavaştı, mobil cihazlarda sepet işlemi sürekli hata veriyordu ve satışlar düşüyordu.</p>
+            </div>
+            <div class="project-detail-box">
+                <h4>Çözüm:</h4>
+                <p>React ve Node.js ile sıfırdan, yüksek performanslı bir e-ticaret platformu kurduk. Ödeme sistemlerini entegre ettik ve yönetim panelini tamamen yeniledik.</p>
+            </div>
+            <div class="project-detail-box" style="border-left-color: #fff;">
+                <h4 style="color: #fff;">Sonuç:</h4>
+                <p>Site yükleme hızı 3 saniyeden 0.8 saniyeye düştü, mobil satışlarda %150 artış sağlandı.</p>
+            </div>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20GecShop%20gibi%20modern%20bir%20e-ticaret%20sitesi%20istiyorum." target="_blank" class="modal-btn" style="margin-top:15px;">Buna Benzer Bir Proje İstiyorum</a>
+        </div>
+    </div>
+
+    <!-- 5. Proje 2 (FitLife) Detay Modalı -->
+    <div id="modal-proje2" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-proje2')">&times;</span>
+            <div class="modal-icon"><i class="fa-solid fa-dumbbell"></i></div>
+            <h3>FitLife - Mobil Uygulama Vaka Analizi</h3>
+            <div class="project-detail-box">
+                <h4>Fikir:</h4>
+                <p>Kullanıcıların kendi antrenman programlarını oluşturabileceği, kalori takibi yapabileceği ve sosyal bir toplulukla etkileşime girebileceği bir mobil uygulama.</p>
+            </div>
+            <div class="project-detail-box">
+                <h4>Çözüm:</h4>
+                <p>Flutter ile hem iOS hem de Android'de çalışan tek bir kod tabanı oluşturduk. Firebase altyapısıyla anlık veri senkronizasyonu ve push bildirim sistemleri kurduk.</p>
+            </div>
+            <div class="project-detail-box" style="border-left-color: #fff;">
+                <h4 style="color: #fff;">Sonuç:</h4>
+                <p>Uygulama ilk 3 ayda 10.000'den fazla indirildi ve mağazalarda 4.8 yıldız puanı aldı.</p>
+            </div>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20FitLife%20gibi%20bir%20mobil%20uygulama%20yapt%C4%B1rmak%20istiyorum." target="_blank" class="modal-btn" style="margin-top:15px;">Uygulamamı Tasarlayın</a>
+        </div>
+    </div>
+
+    <!-- 6. Proje 3 (KargoBot) Detay Modalı -->
+    <div id="modal-proje3" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-proje3')">&times;</span>
+            <div class="modal-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <h3>KargoBot - Otomasyon Vaka Analizi</h3>
+            <div class="project-detail-box">
+                <h4>İhtiyaç:</h4>
+                <p>E-ticaret müşterimiz, "Siparişim nerede?" sorusuna cevap veremiyor ve destek ekibi yüzlerce aynı mesajla boğuşuyordu.</p>
+            </div>
+            <div class="project-detail-box">
+                <h4>Çözüm:</h4>
+                <p>WhatsApp API kullanarak bir bot geliştirdik. Müşteri sipariş numarasını yazdığında bot anında kargo durumunu sorgulayıp müşteriye iletiyor.</p>
+            </div>
+            <div class="project-detail-box" style="border-left-color: #fff;">
+                <h4 style="color: #fff;">Sonuç:</h4>
+                <p>Destek ekibinin iş yükü %70 azaldı ve müşteri memnuniyeti anında yanıt alma sayesinde zirveye ulaştı.</p>
+            </div>
+            <a href="https://wa.me/905515198994?text=Merhaba,%20KargoBot%20gibi%20bir%20WhatsApp%20otomasyonu%20istiyorum." target="_blank" class="modal-btn" style="margin-top:15px;">Botumu Tasarlayın</a>
+        </div>
+    </div>
+
+    <!-- 7. Teklif Al Modalı (Sadece WhatsApp) -->
+    <div id="modal-teklif" class="modal">
+        <div class="modal-content" style="text-align: center; max-width: 450px;">
+            <span class="close-btn" onclick="closeModal('modal-teklif')">&times;</span>
+            <div class="modal-icon"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i></div>
+            <h3 style="margin-bottom: 10px;">Hemen Teklif Alın</h3>
+            <p style="margin-bottom: 30px;">Projenizden bahsedin, size en kısa sürede en uygun fiyat teklifini sunalım.</p>
+            
+            <a href="https://wa.me/905515198994?text=Merhaba,%20bir%20proje%20yapt%C4%B1rmak%20istiyorum%20ve%20teklif%20almak%20istiyorum." target="_blank" class="btn-primary" style="justify-content: center; font-size: 18px; padding: 18px 20px;">
+                <i class="fa-brands fa-whatsapp"></i> +90 551 519 89 94
+            </a>
+            <p style="margin-top: 15px; font-size: 13px;">7/24 Kesintisiz Destek Hattı</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="iletisim">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo" style="font-size: 28px;">
+                    <span class="at">@</span><span class="kodla">KODLA.</span><span class="gec">GEC</span>
+                </div>
+                <p>Adıyaman merkezli yazılım geliştirici.<br>Fikrini gerçeğe dönüştürüyoruz.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>İletişim</h4>
+                <ul>
+                    <li>
+                        <a href="https://wa.me/905515198994" target="_blank" class="footer-contact-link">
+                            <i class="fa-brands fa-whatsapp"></i> +90 551 519 89 94
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://instagram.com/kodla.gec" target="_blank" class="footer-contact-link">
+                            <i class="fa-brands fa-instagram"></i> @kodla.gec
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://tiktok.com/@kodla.gec" target="_blank" class="footer-contact-link">
+                            <i class="fa-brands fa-tiktok"></i> @kodla.gec
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Konum</h4>
+                <ul>
+                    <li>Diyarbakır, Türkiye</li>
+                    <li>Uzaktan tüm Türkiye'ye hizmet</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            © 2024 @kodla.gec — Tüm hakları saklıdır. | KVKK & Gizlilik Politikası
+        </div>
+    </footer>
+
+    <!-- MODAL AÇMA/KAPAMA İÇİN JAVASCRIPT KODU -->
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+
+</body>
+</html>
